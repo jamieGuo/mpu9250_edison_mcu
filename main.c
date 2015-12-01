@@ -3,14 +3,17 @@
 
 #include "inv_mpu.h"
 #include "inv_mpu_dmp_motion_driver.h"
-//#include "ml_math_func.h"
-#include "mylib.h"
+#include "ml_math_func.h"
+//#include "mylib.h"
+#include <math.h>
 
 int myconfi();
 int mpu9250_read_fifo(int t);
 void readRaw();
-
+//
 void mcu_main()	{
+
+	debug_print(DBG_DEBUG, "%2f\n", round(2.6));
 
 	mcu_sleep(100);
 
@@ -26,7 +29,7 @@ void mcu_main()	{
 	debug_print(DBG_INFO, "configurate() success\n");
 
 //	readRaw();
-	while( mpu9250_read_fifo(40) )	{
+	while( mpu9250_read_fifo(30) )	{
 		debug_print(DBG_DEBUG, "mpu9250_read_fifo() failed\n");
 	}
 
@@ -66,9 +69,9 @@ int myconfi()	{
 	}
 	debug_print(DBG_INFO, "dmp_load_motion_driver_firmware suc\n");
 
-	signed char gyro_orientation[9] = { 0, 0, -1,
-										0, -1, 0,
-										1, 0, 0 };
+	signed char gyro_orientation[9] = { 1, 0, 0,
+										0, 1, 0,
+										0, 0, 1 };
 	if( dmp_set_orientation(inv_orientation_matrix_to_scalar(gyro_orientation)) )	{
 		debug_print(DBG_ERROR, "dmp_set_orientation failed\n ");
 		return -1;
@@ -80,7 +83,7 @@ int myconfi()	{
 		return -1;
 	}
 
-	if( dmp_set_fifo_rate(50) )	{
+	if( dmp_set_fifo_rate(200) )	{
 		debug_print(DBG_INFO, "dmp_set_fifo_rate(50) failed\n");
 		return -1;
 	}
@@ -108,7 +111,7 @@ int mpu9250_read_fifo(int t)	{
 
 	while(1){
 		if( dmp_read_fifo(gyro, accel, quat, &timestamp, &sensors, &more) < 0 )	{
-			debug_print(DBG_INFO, "dmp_read_fifo() failed\n" );
+			debug_print(DBG_INFO, "dmp_read_fifo() failed, more=%d\n", more );
 			return -1;
 		}
 		debug_print(DBG_INFO, "[DMP][%d] ax:%d, ay:%d, az:%d) \t gx:%d, gy:%d, gz:%d\n",
