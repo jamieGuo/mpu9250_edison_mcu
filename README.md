@@ -5,3 +5,5 @@
 >* MPL_LOG_NDEBUG = 1
 >* MPU9250
 >* USE_DMP
+>* MLMATH
+>* LINUX
