@@ -5,7 +5,6 @@
 #include "inv_mpu_dmp_motion_driver.h"
 #include "ml_math_func.h"
 //#include "mylib.h"
-#include <math.h>
 
 int myconfi();
 int mpu9250_read_fifo(int t);
@@ -13,14 +12,11 @@ void readRaw();
 //
 void mcu_main()	{
 
-	debug_print(DBG_DEBUG, "%2f\n", round(2.6));
-
 	mcu_sleep(100);
 
 	while(mpu_init( (struct int_param_s *)0 ))	{
 		debug_print(DBG_ERROR, "mpu init failed\n");
 	}
-
 	debug_print(DBG_INFO, "mpu init success\n");
 
 	while( myconfi() )	{
@@ -33,7 +29,7 @@ void mcu_main()	{
 		debug_print(DBG_DEBUG, "mpu9250_read_fifo() failed\n");
 	}
 
-	debug_print(DBG_DEBUG, "all finish() \n");
+	debug_print(DBG_DEBUG, "program finish() \n");
 	//	return 0;
 }
 
@@ -114,11 +110,9 @@ int mpu9250_read_fifo(int t)	{
 			debug_print(DBG_INFO, "dmp_read_fifo() failed, more=%d\n", more );
 			return -1;
 		}
-		debug_print(DBG_INFO, "[DMP][%d] ax:%d, ay:%d, az:%d) \t gx:%d, gy:%d, gz:%d\n",
-				timestamp, accel[0], accel[1], accel[2] , gyro[0], gyro[1], gyro[2] );
+		debug_print(DBG_INFO, "[DMP][%d] ax:%d, ay:%d, az:%d) \t gx:%d, gy:%d, gz:%d \t q0: %d, q1: %d, q2: %d, q3: %d \n",
+				timestamp, accel[0], accel[1], accel[2] , gyro[0], gyro[1], gyro[2], quat[0], quat[1], quat[2], quat[3] );
 
-//		mpu_get_accel_reg(accel, &timestamp);
-//		debug_print(DBG_INFO, "\ta:%d, %d, %d \n" , accel[0], accel[1], accel[2] );
 		mcu_sleep(t);
 	}
 	return 0;

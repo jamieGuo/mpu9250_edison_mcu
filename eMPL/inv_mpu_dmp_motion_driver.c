@@ -62,8 +62,10 @@
 #define log_i       MPL_LOGI
 #define log_e       MPL_LOGE
 
+
 #elif defined EMPL_TARGET_EDISON_MCU
 #include "edison_mcu.h"
+
 
 #else
 #error  Gyro driver is missing the system layer implementations.
@@ -502,9 +504,6 @@ static struct dmp_s dmp = {
  */
 int dmp_load_motion_driver_firmware(void)
 {
-	log_i("dmp_load_motion_driver_firmware\n");
-//	unsigned short dmp_code_size = DMP_CODE_SIZE;
-	log_i("dmp code size: %d\n", DMP_CODE_SIZE);
     return mpu_load_firmware(DMP_CODE_SIZE, dmp_memory, sStartAddress,
         DMP_SAMPLE_RATE);
 }
@@ -1271,11 +1270,8 @@ int dmp_read_fifo(short *gyro, short *accel, long *quat,
     sensors[0] = 0;
 
     /* Get a packet. */
-    if (mpu_read_fifo_stream(dmp.packet_length, fifo_data, more))	{
-
-        log_i("mpu_read_fifo_stream() failed\n");
+    if (mpu_read_fifo_stream(dmp.packet_length, fifo_data, more))
         return -1;
-    }
 
     /* Parse DMP packet. */
     if (dmp.feature_mask & (DMP_FEATURE_LP_QUAT | DMP_FEATURE_6X_LP_QUAT)) {
@@ -1311,7 +1307,6 @@ int dmp_read_fifo(short *gyro, short *accel, long *quat,
             /* Quaternion is outside of the acceptable threshold. */
             mpu_reset_fifo();
             sensors[0] = 0;
-            log_i("Quaternion is outside of the acceptable threshold\n");
             return -1;
         }
         sensors[0] |= INV_WXYZ_QUAT;

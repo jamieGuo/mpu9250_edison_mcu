@@ -14,7 +14,7 @@
 #define log_e(...)       	debug_print(DBG_ERROR, __VA_ARGS__);
 #define labs        abs
 #define fabs(x)     (((x)>0)?(x):-(x))
-
+//#define min(a, b)			( (a)<(b) ? (a):(b) )
 
 void __no_operation();
 inline int min(int a, int b);
