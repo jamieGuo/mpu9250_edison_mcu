@@ -66,8 +66,8 @@ int myconfi()	{
 	debug_print(DBG_INFO, "dmp_load_motion_driver_firmware suc\n");
 
 	signed char gyro_orientation[9] = { 1, 0, 0,
-										0, 1, 0,
-										0, 0, 1 };
+										0, -1, 0,
+										0, 0, -1 };
 	if( dmp_set_orientation(inv_orientation_matrix_to_scalar(gyro_orientation)) )	{
 		debug_print(DBG_ERROR, "dmp_set_orientation failed\n ");
 		return -1;
