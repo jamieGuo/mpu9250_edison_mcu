@@ -3,16 +3,12 @@
 
 #include "inv_mpu.h"
 #include "inv_mpu_dmp_motion_driver.h"
-//#include "eMPL_outputs.h"
-#include "ml_math_func.h"
-//#include "mpl.h"
-//#include "quaternion_supervisor.h"
+#include "ml_math_func.h"	// for oriented
+
 
 int myconfi();
 void print_int_status();
 int int_read_fifo();
-int mpu9250_read_fifo(int t);
-//void readRaw(int t);
 
 
 void mcu_main()	{
@@ -130,47 +126,3 @@ int int_read_fifo()	{
 
 	return 0;
 }
-
-int mpu9250_read_fifo(int t)	{
-
-	debug_print(DBG_INFO, "Read DMP!\n");
-
-	short gyro[3];
-	short accel[3];
-	long quat[4];
-	unsigned long timestamp;
-	short sensors = {INV_XYZ_GYRO | INV_XYZ_ACCEL};
-	unsigned char more;
-	int orient[9];
-
-//	short *gyro, short *accel, long *quat,
-//	    unsigned long *timestamp, short *sensors, unsigned char *more)
-
-	while(1){
-
-		if( dmp_read_fifo(gyro, accel, quat, &timestamp, &sensors, &more) < 0 )	{
-			debug_print(DBG_INFO, "dmp_read_fifo() failed, more=%d\n", more );
-			return -1;
-		}
-		debug_print(DBG_INFO, "[DMP][%d] ax:%d, ay:%d, az:%d) \t gx:%d, gy:%d, gz:%d \t q0: %d, q1: %d, q2: %d, q3: %d \n",
-				timestamp, accel[0], accel[1], accel[2] , gyro[0], gyro[1], gyro[2], quat[0], quat[1], quat[2], quat[3] );
-
-		mcu_sleep(t);
-	}
-	return 0;
-}
-//
-//void readRaw(int t)	{
-//	short accel[3];
-//	short gyro[3];
-//	long heading;
-//	unsigned long ta, tg;
-//
-//	while(1)	{
-//		mpu_get_accel_reg(accel, &ta);
-//		mpu_get_gyro_reg(gyro, &tg);
-//		debug_print(DBG_INFO, "[%d] a:%d, %d, %d \n [%d] g:%d, %d, %d\n", ta , accel[2], accel[1], accel[0]
-//		                                                                , tg, gyro[2], gyro[1], gyro[0] );
-//		mcu_sleep(t);
-//	}
-//}
