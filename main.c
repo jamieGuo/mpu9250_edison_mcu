@@ -4,7 +4,7 @@
 #include "inv_mpu.h"
 #include "inv_mpu_dmp_motion_driver.h"
 #include "ml_math_func.h"	// for oriented
-
+#include "mympl.h"
 
 int myconfi();
 void print_int_status();
@@ -108,7 +108,8 @@ void print_int_status()	{
 }
 int int_read_fifo()	{
 
-	debug_print(DBG_INFO, "Read DMP!\n");
+	int length = 0;
+	char buf[256];
 
 	short gyro[3];
 	short accel[3];
@@ -121,8 +122,23 @@ int int_read_fifo()	{
 		debug_print(DBG_INFO, "dmp_read_fifo() failed, more=%d\n", more );
 		return -1;
 	}
-	debug_print(DBG_INFO, "[DMP][%d] ax:%d, ay:%d, az:%d) \t gx:%d, gy:%d, gz:%d \t q0: %d, q1: %d, q2: %d, q3: %d \n",
+
+//	debug_print(DBG_INFO, "test\n");
+//	float euler[3];
+//	dmpGetEuler( euler, quat);
+//	debug_print(DBG_INFO, "[%dms] accel: %f, %f, %f , gyro: %f, %f, %f , euler: %f %f %f \n",
+//							accel[0]/16384, accel[1]/16384, accel[2]/16384,
+//							gyro[0]/131, gyro[1]/131, gyro[2]/131,
+//							euler[0], euler[1], euler[2] );
+	// ttymcu0
+	length = mcu_snprintf( buf, 255, "[DMP][%dms]ax:%d,ay:%d,az:%d,gx:%d,gy:%d,gz:%d,q0:%d,q1:%d,q2:%d,q3:%d\n",
 			timestamp, accel[0], accel[1], accel[2] , gyro[0], gyro[1], gyro[2], quat[0], quat[1], quat[2], quat[3] );
+
+	host_send( (unsigned char)buf, length);
+
+	// ttymcu1
+//	debug_print(DBG_INFO, "[DMP][%d]ax:%d,ay:%d,az:%d)\tgx:%d,gy:%d,gz:%d\tq0:%d,q1:%d,q2:%d,q3:%d\n",
+//			timestamp, accel[0], accel[1], accel[2] , gyro[0], gyro[1], gyro[2], quat[0], quat[1], quat[2], quat[3] );
 
 	return 0;
 }

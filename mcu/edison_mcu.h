@@ -25,5 +25,4 @@ static inline int reg_int_cb(struct int_param_s *int_param)
     return 0;
 }
 
-
 #endif
