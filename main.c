@@ -70,9 +70,11 @@ int myconfi()	{
 	}
 	debug_print(DBG_INFO, "dmp_load_motion_driver_firmware suc\n");
 
+	// original
 	signed char gyro_orientation[9] = { 1, 0, 0,
 										0, -1, 0,
 										0, 0, -1 };
+
 	if( dmp_set_orientation(inv_orientation_matrix_to_scalar(gyro_orientation)) )	{
 		debug_print(DBG_ERROR, "dmp_set_orientation failed\n ");
 		return -1;
@@ -131,10 +133,10 @@ int int_read_fifo()	{
 //							gyro[0]/131, gyro[1]/131, gyro[2]/131,
 //							euler[0], euler[1], euler[2] );
 	// ttymcu0
-	length = mcu_snprintf( buf, 255, "[DMP][%dms]ax:%d,ay:%d,az:%d,gx:%d,gy:%d,gz:%d,q0:%d,q1:%d,q2:%d,q3:%d\n",
+	length = mcu_snprintf( buf, 255, "%d, %d, %d, %d, %d, %d, %d, %d, %d, %d, %d\n",
 			timestamp, accel[0], accel[1], accel[2] , gyro[0], gyro[1], gyro[2], quat[0], quat[1], quat[2], quat[3] );
 
-	host_send( (unsigned char)buf, length);
+	host_send( (unsigned char*)buf, length);
 
 	// ttymcu1
 //	debug_print(DBG_INFO, "[DMP][%d]ax:%d,ay:%d,az:%d)\tgx:%d,gy:%d,gz:%d\tq0:%d,q1:%d,q2:%d,q3:%d\n",

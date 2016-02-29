@@ -9,8 +9,9 @@
 #define MYMPL_H_
 
 #include "mcu_api.h"
-#include "math.h"
+//#include "math.h"
 
+/* generate_mcu_bin.sh add -lmath before -lc
 int dmpGetEuler(float *data, long *q)	{
 
 	debug_print(DBG_INFO, "euler!\n");
@@ -34,5 +35,6 @@ int dmpGetEuler(float *data, long *q)	{
 	debug_print(DBG_INFO, "test6\n");
 	return 0;
 }
+*/
 
 #endif /* MYMPL_H_ */
